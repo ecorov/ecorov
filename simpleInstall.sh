@@ -4,17 +4,14 @@
 # python-dev contain "Python.h"
 
 sudo apt-get install -y git python-flup lighttpd 
-
 # Install RPIO. RPi 3 has problem to instalL RPIO, the solution is using the following repository.
 cd; git clone https://github.com/metachris/RPIO.git --branch v2 --single-branch; cd RPIO
 sudo python setup.py install; cd; sudo rm -R RPIO;
+## Install finished. 
 
 
 
-
-
-
-
+## update
 sudo cp -r www/* /var/www/
 sudo mkdir -p /var/www/media
 sudo chown -R www-data:www-data /var/www
