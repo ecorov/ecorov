@@ -1,11 +1,19 @@
-sudo apt-get install -y apache2 php5 libapache2-mod-php5 gpac motion python-flup lighttpd python-dev python-setuptools
-sudo easy_install -U RPIO
-# on RPi 3
-#cd ~
-#git clone https://github.com/metachris/RPIO.git --branch v2 --single-branch
-#cd RPIO
-#sudo python setup.py install
-#sudo easy_install -U RPIO
+# python-setuptools contains easy_install which will be used for installing RPIO
+# lighttpd is light weight web server
+# python-flup is a python library contains FastCGI
+# python-dev contain "Python.h"
+
+sudo apt-get install -y git python-flup lighttpd 
+
+# Install RPIO. RPi 3 has problem to instalL RPIO, the solution is using the following repository.
+cd; git clone https://github.com/metachris/RPIO.git --branch v2 --single-branch; cd RPIO
+sudo python setup.py install; cd; sudo rm -R RPIO;
+
+
+
+
+
+
 
 sudo cp -r www/* /var/www/
 sudo mkdir -p /var/www/media
