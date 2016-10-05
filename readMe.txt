@@ -1,5 +1,17 @@
+cd;
+sudo rm -R ecorov-master;  
+sudo wget https://github.com/withr/ecorov/archive/master.zip; 
+unzip master.zip; 
 
- 
+sudo chmod 777 -R ecorov-master/;
+cd ecorov-master/; 
+
+
+
+
+
+
+
 Steps:
  1. After burning Rasbian image into RPi's Micro SD card, enable the camera module and extent storage.
 sudo raspi-config
