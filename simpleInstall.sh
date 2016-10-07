@@ -11,10 +11,9 @@ sudo python setup.py install; cd; sudo rm -R RPIO-RPi3;
 
 cd; 
 sudo rm -R *;  
-sudo wget https://github.com/withr/ecorov/archive/master.zip; 
-unzip master.zip; 
-sudo chmod 777 -R ecorov-master/;
-cd ecorov-master/; 
+sudo git clone https://github.com/withr/ecorov.git; cd ecorov; 
+#sudo chmod 777 -R ecorov-master/;
+
 
 sudo killall raspimjpeg
 sudo rm /var/www/*
