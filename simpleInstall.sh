@@ -3,7 +3,7 @@
 # python-flup is a python library contains FastCGI
 # python-dev contain "Python.h"
 
-sudo apt-get install -y git python-setuptools python-dev python-flup lighttpd 
+sudo apt-get install -y git python-setuptools python-dev python-flup python-smbus lighttpd 
 
 # Install RPIO. RPi 3 has problem to instalL RPIO, the solution is using the following repository.
 cd; git clone https://github.com/withr/RPIO-RPi3.git; cd RPIO-RPi3
@@ -14,11 +14,39 @@ sudo rm -R *;
 sudo git clone https://github.com/withr/ecorov.git; cd ecorov; 
 #sudo chmod 777 -R ecorov-master/;
 
+## web server and python control files;
+## sudo mv /var/www/html /var/www/ecorov
+## Backup original lighttp configure file
+
+if [ ! -e /usr/bin/pythonRoot ]; then
+  sudo cp /usr/bin/python2.7 /usr/bin/pythonRoot
+  sudo chmod u+s /usr/bin/pythonRoot
+fi
+
+if [ ! -e /etc/lighttpd/lighttpd.conf.bak ]; then
+  sudo cp /etc/lighttpd/lighttpd.conf /etc/lighttpd/lighttpd.conf.bak
+fi
+sudo cp etc/lighttpd/* /var/www/html
+sudo chmod 755 /var/www/html/*
+sudo cat etc/lighttpd.conf /etc/lighttpd/lighttpd.conf
+
+
+
+
+
+
+
+
+
+
+q
 
 sudo killall raspimjpeg
 sudo rm /var/www/*
 
+
 sudo cp -r www/* /var/www/
+
 sudo mkdir -p /var/www/media
 
 ## pipe for raspimjpeg to read command;
@@ -41,15 +69,9 @@ sudo cp -r etc/raspimjpeg /etc/
 sudo chmod 644 /etc/raspimjpeg
 
 
-## web server and python control files;
-sudo cp etc/lighttpd/* /var/www/ecorov
-sudo chmod 755 /var/www/ecorov/*
-sudo cp etc/lighttpd.conf /etc/lighttpd/lighttpd.conf
 
-if [ ! -e /usr/bin/pythonRoot ]; then
-  sudo cp /usr/bin/python2.7 /usr/bin/pythonRoot
-  sudo chmod u+s /usr/bin/pythonRoot
-fi
+
+
 
 
 
