@@ -15,7 +15,7 @@ sudo git clone https://github.com/withr/ecorov.git; cd ecorov;
 #sudo chmod 777 -R ecorov-master/;
 
 ## web server and python control files;
-## sudo mv /var/www/html /var/www/ecorov
+sudo mv /var/www/html /var/www/ecorov
 ## Backup original lighttp configure file
 
 if [ ! -e /usr/bin/pythonRoot ]; then
@@ -26,20 +26,10 @@ fi
 if [ ! -e /etc/lighttpd/lighttpd.conf.bak ]; then
   sudo cp /etc/lighttpd/lighttpd.conf /etc/lighttpd/lighttpd.conf.bak
 fi
-sudo cp etc/lighttpd/* /var/www/html
-sudo chmod 755 /var/www/html/*
+sudo cp etc/lighttpd/* /var/www/ecorov
+sudo chmod 755 /var/www/ecorov/*
 sudo cat etc/lighttpd.conf /etc/lighttpd/lighttpd.conf
 
-
-
-
-
-
-
-
-
-
-q
 
 sudo killall raspimjpeg
 sudo rm /var/www/*
