@@ -7,6 +7,7 @@
 # Camera Options
 #
 # annotation max length: 31 characters
+# annotation RPi ROV %Y.%M.%D_%h:%m:%s
 annotation 
 anno_background false
 anno3_custom_background_colour 0
@@ -55,22 +56,22 @@ divider 1
 #
 # Video Options
 #
-video_width 1280
-video_height 720
+video_width 1920
+video_height 1080
 video_fps 30
 video_bitrate 17000000
 video_buffer 0
 
 #MP4Box false=leave as raw h264, background=box in background
-MP4Box flase
-MP4Box_fps 25
+MP4Box false
+MP4Box_fps 30
 
 #
 # Image Options
 #
 image_width 2592
 image_height 1944
-image_quality 85
+image_quality 90
 
 #time lapse interval 0.1 sec units
 tl_interval 30
@@ -102,7 +103,7 @@ thumb_gen vit
 # autostart: standard/idle
 # motion detection can only be true if autostart is standard
 #
-autostart idle
+autostart standard
 motion_detection false
 
 # Watchdog
