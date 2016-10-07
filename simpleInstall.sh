@@ -42,9 +42,9 @@ sudo chmod 644 /etc/raspimjpeg
 
 
 ## web server and python control files;
-sudo cp etc/lighttpd/* /var/www/html
-sudo chmod 755 /var/www/html/*
-sudo cp etc/lighttpd/lighttpd.conf /etc/lighttpd/lighttpd.conf
+sudo cp etc/lighttpd/* /var/www/ecorov
+sudo chmod 755 /var/www/ecorov/*
+sudo cp etc/lighttpd.conf /etc/lighttpd/lighttpd.conf
 
 if [ ! -e /usr/bin/pythonRoot ]; then
   sudo cp /usr/bin/python2.7 /usr/bin/pythonRoot
