@@ -44,11 +44,13 @@ sudo chmod 644 /etc/raspimjpeg
 ## web server and python control files;
 sudo cp etc/lighttpd/* /var/www/html
 sudo chmod 755 /var/www/html/*
+sudo cp etc/lighttpd/lighttpd.conf /etc/lighttpd/lighttpd.conf
+
 if [ ! -e /usr/bin/pythonRoot ]; then
   sudo cp /usr/bin/python2.7 /usr/bin/pythonRoot
   sudo chmod u+s /usr/bin/pythonRoot
 fi
-sudo cp etc/lighttpd/lighttpd.conf /etc/lighttpd/lighttpd.conf
+
 
 
 ## Automatically start when start RPi;
