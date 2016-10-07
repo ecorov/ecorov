@@ -6,8 +6,8 @@
 sudo apt-get install -y git python-setuptools python-dev python-flup lighttpd 
 
 # Install RPIO. RPi 3 has problem to instalL RPIO, the solution is using the following repository.
-cd; git clone https://github.com/metachris/RPIO.git --branch v2 --single-branch; cd RPIO
-sudo python setup.py install; cd; sudo rm -R RPIO;
+cd; git clone https://github.com/withr/RPIO-RPi3.git; cd RPIO-RPi3
+sudo python setup.py install; cd; sudo rm -R RPIO-RPi3;
 
 cd; 
 sudo rm -R *;  
