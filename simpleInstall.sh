@@ -3,29 +3,19 @@
 # python-flup is a python library contains FastCGI
 # python-dev contain "Python.h"
 # python-smbus for GPIO
-
-
-
 sudo apt-get install -y git python-setuptools python-dev python-flup python-smbus lighttpd
-
 
 # Install RPIO. RPi 3 has problem to instalL RPIO, the solution is using the following repository.
 cd; git clone https://github.com/withr/RPIO-RPi3.git; cd RPIO-RPi3
 sudo python setup.py install; cd; sudo rm -R RPIO-RPi3;
 
-## Install mjpeg-streamer
-cd; sudo git clone https://github.com/mjpg-streamer.git
-cd mjpg-streamer/mjpg-streamer-experimental/
-sudo make
-sudo make install
 
 
-# cmake for install mjpeg-streamer
-# libjpeg8-dev for install mjpeg-streamer
-sudo apt-get install -y cmake libjpeg8-dev
-export LD_LIBRARY_PATH=/home/pi/mjpg-streamer/mjpg-streamer-experimental/
-sudo ln -s /home/pi/mjpg-streamer/mjpg-streamer-experimental/mjpg_streamer /usr/bin/mjpeg-streamer
-mjpg_streamer -o "output_http.so -w ./www -p 8080" -i "input_raspicam.so -d 0.05"
+
+
+
+
+
 
 
 
@@ -35,6 +25,7 @@ cd;
 sudo rm -R *;  
 sudo git clone https://github.com/withr/ecorov.git; cd ecorov; 
 #sudo chmod 777 -R ecorov-master/;
+
 
 ## web server and python control files;
 sudo mv /var/www/html /var/www/ecorov
@@ -53,13 +44,15 @@ sudo chmod 755 /var/www/ecorov/*
 sudo cat etc/lighttpd.conf /etc/lighttpd/lighttpd.conf
 
 
+
+
+
+
 sudo killall raspimjpeg
 sudo rm /var/www/*
 
 
-sudo cp -r www/* /var/www/
 
-sudo mkdir -p /var/www/media
 
 ## pipe for raspimjpeg to read command;
 if [ ! -e /var/www/FIFO ]; then
@@ -81,15 +74,26 @@ sudo cp -r etc/raspimjpeg /etc/
 sudo chmod 644 /etc/raspimjpeg
 
 
-
-
-
-
-
-
 ## Automatically start when start RPi;
 sudo cp -r etc/rc.local /etc/
 sudo chmod 755 /etc/rc.local
+
+
+## Install mjpeg-streamer
+cd; sudo git clone https://github.com/mjpg-streamer.git
+cd mjpg-streamer/mjpg-streamer-experimental/
+sudo make
+sudo make install
+
+
+# cmake for install mjpeg-streamer
+# libjpeg8-dev for install mjpeg-streamer
+sudo apt-get install -y cmake libjpeg8-dev
+export LD_LIBRARY_PATH=/home/pi/mjpg-streamer/mjpg-streamer-experimental/
+sudo ln -s /home/pi/mjpg-streamer/mjpg-streamer-experimental/mjpg_streamer /usr/bin/mjpeg-streamer
+mjpg_streamer -o "output_http.so -w ./www -p 8080" -i "input_raspicam.so -d 0.05"
+
+
 
 ## Start raspimjpeg;
 sudo mkdir -p /dev/shm/mjpeg
