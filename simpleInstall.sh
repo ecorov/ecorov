@@ -5,10 +5,6 @@
 # python-smbus for GPIO
 sudo apt-get install -y git python-setuptools python-dev python-flup python-smbus lighttpd
 
-# Install RPIO. RPi 3 has problem to instalL RPIO, the solution is using the following repository.
-cd; git clone https://github.com/withr/RPIO-RPi3.git; cd RPIO-RPi3
-sudo python setup.py install; cd; sudo rm -R RPIO-RPi3;
-
 ## Install ecorov 
 cd; 
 sudo rm -R *;  
@@ -22,18 +18,35 @@ if [ ! -e /usr/bin/raspimjpeg ]; then
   sudo ln -s /opt/vc/bin/raspimjpeg /usr/bin/raspimjpeg
 fi
 
+
 ## pipe for raspimjpeg to read command;
 if [ ! -e /var/www/FIFO ]; then
   sudo mknod /var/www/FIFO p
 fi
 sudo chmod 666 /var/www/FIFO
 
+
 ## raspimjpeg config file;
 sudo cp -r etc/raspimjpeg /etc/
 sudo chmod 644 /etc/raspimjpeg
 
+
+sudo mkdir -p /var/www/media
+
 sudo cp -R www /var/www
 
+
+
+
+
+
+
+
+
+
+# Install RPIO. RPi 3 has problem to instalL RPIO, the solution is using the following repository.
+cd; git clone https://github.com/withr/RPIO-RPi3.git; cd RPIO-RPi3
+sudo python setup.py install; cd; sudo rm -R RPIO-RPi3;
 
 
 
