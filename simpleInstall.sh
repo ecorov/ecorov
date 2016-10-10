@@ -9,27 +9,41 @@ sudo apt-get install -y git python-setuptools python-dev python-flup python-smbu
 cd; git clone https://github.com/withr/RPIO-RPi3.git; cd RPIO-RPi3
 sudo python setup.py install; cd; sudo rm -R RPIO-RPi3;
 
-
-
-
-
-
-
-
-
-
-
-
-
+## Install ecorov 
 cd; 
 sudo rm -R *;  
 sudo git clone https://github.com/withr/ecorov.git; cd ecorov; 
-#sudo chmod 777 -R ecorov-master/;
+
+## INSTALL raspimjpeg
+## raspimjpeg binary program;
+sudo cp -r bin/raspimjpeg /opt/vc/bin/
+sudo chmod 755 /opt/vc/bin/raspimjpeg
+if [ ! -e /usr/bin/raspimjpeg ]; then
+  sudo ln -s /opt/vc/bin/raspimjpeg /usr/bin/raspimjpeg
+fi
+
+## pipe for raspimjpeg to read command;
+if [ ! -e /var/www/FIFO ]; then
+  sudo mknod /var/www/FIFO p
+fi
+sudo chmod 666 /var/www/FIFO
+
+## raspimjpeg config file;
+sudo cp -r etc/raspimjpeg /etc/
+sudo chmod 644 /etc/raspimjpeg
+
+sudo cp -R www /var/www
 
 
-## web server and python control files;
-sudo mv /var/www/html /var/www/ecorov
-## Backup original lighttp configure file
+
+
+
+
+
+
+
+
+
 
 if [ ! -e /usr/bin/pythonRoot ]; then
   sudo cp /usr/bin/python2.7 /usr/bin/pythonRoot
@@ -54,24 +68,6 @@ sudo rm /var/www/*
 
 
 
-## pipe for raspimjpeg to read command;
-if [ ! -e /var/www/FIFO ]; then
-  sudo mknod /var/www/FIFO p
-fi
-sudo chmod 666 /var/www/FIFO
-
-
-
-## raspimjpeg binary program;
-sudo cp -r bin/raspimjpeg /opt/vc/bin/
-sudo chmod 755 /opt/vc/bin/raspimjpeg
-if [ ! -e /usr/bin/raspimjpeg ]; then
-  sudo ln -s /opt/vc/bin/raspimjpeg /usr/bin/raspimjpeg
-fi
-
-## raspimjpeg config file;
-sudo cp -r etc/raspimjpeg /etc/
-sudo chmod 644 /etc/raspimjpeg
 
 
 ## Automatically start when start RPi;
