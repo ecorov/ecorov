@@ -3,11 +3,10 @@
 # python-flup is a python library contains FastCGI
 # python-dev contain "Python.h"
 # python-smbus for GPIO
-# cmake for install mjpeg-streamer
-# libjpeg8-dev for install mjpeg-streamer
 
 
-sudo apt-get install -y git python-setuptools python-dev python-flup python-smbus lighttpd cmake libjpeg8-dev
+
+sudo apt-get install -y git python-setuptools python-dev python-flup python-smbus lighttpd
 
 
 # Install RPIO. RPi 3 has problem to instalL RPIO, the solution is using the following repository.
@@ -20,6 +19,10 @@ cd mjpg-streamer/mjpg-streamer-experimental/
 sudo make
 sudo make install
 
+
+# cmake for install mjpeg-streamer
+# libjpeg8-dev for install mjpeg-streamer
+sudo apt-get install -y cmake libjpeg8-dev
 export LD_LIBRARY_PATH=/home/pi/mjpg-streamer/mjpg-streamer-experimental/
 sudo ln -s /home/pi/mjpg-streamer/mjpg-streamer-experimental/mjpg_streamer /usr/bin/mjpeg-streamer
 mjpg_streamer -o "output_http.so -w ./www -p 8080" -i "input_raspicam.so -d 0.05"
