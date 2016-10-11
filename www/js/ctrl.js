@@ -200,8 +200,6 @@ $("#showsys").on('click', function() {
 });
 
 
-
-var domain = 'http://' + document.domain + ':8080/'
-$("#webcam").src = domain
+document.getElementById('webcam').src = 'http://' + document.domain + ':8080/'
 
 
