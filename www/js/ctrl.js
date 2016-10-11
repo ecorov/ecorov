@@ -200,6 +200,6 @@ $("#showsys").on('click', function() {
 });
 
 
-document.getElementById('webcam').src = 'http://' + document.domain + ':8080/'
+document.getElementById('webcam').src = 'http://' + document.domain + ':8080/javascript_simple.html'
 
 
