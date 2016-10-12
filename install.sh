@@ -1,9 +1,7 @@
- 
+#!/bin/bash
+
 sudo apt-get update
 sudo apt-get install -y git python-flup lighttpd python-setuptools python-smbus cmake libjpeg8-dev python-dev
-
-cd; sudo git clone https://github.com/withr/ecorov.git; 
-cd ecorov; 
 
 ## Install raspimjpeg
 sudo mkdir -p /var/www/media
@@ -50,7 +48,7 @@ sudo make install
 cd /home/pi/mjpg-streamer
 mjpg_streamer -i "input_file.so -d 0.1 -f /dev/shm/mjpeg -n cam.jpg" -o "output_http.so -w ./www -p 8080"&
 
-
+echo "Install finished!"
  
 
 
