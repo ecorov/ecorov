@@ -59,7 +59,7 @@ sudo make install
 
 sudo killall mjpg-streamer
 cd /home/pi/mjpg-streamer
-mjpg_streamer -i "input_file.so -d 0.1 -f /dev/shm/mjpeg -n cam.jpg" -o "output_http.so -w ./www -p 8080"&
+./mjpg_streamer -i "input_file.so -d 0.1 -f /dev/shm/mjpeg -n cam.jpg" -o "output_http.so -w ./www -p 8080"&
 
 echo "Install finished!"
  
