@@ -1,110 +1,62 @@
-# python-setuptools contains easy_install which will be used for installing RPIO
-# lighttpd is light weight web server
-# python-flup is a python library contains FastCGI
-# python-dev contain "Python.h"
-# python-smbus for GPIO
-sudo apt-get install -y git python-setuptools python-dev python-flup python-smbus lighttpd
+ 
+sudo apt-get update
+sudo apt-get install -y git python-flup lighttpd python-setuptools python-smbus cmake libjpeg8-dev python-dev
 
-## Install ecorov 
-cd; 
-sudo rm -R *;  
-sudo git clone https://github.com/withr/ecorov.git; cd ecorov; 
+cd; sudo git clone https://github.com/withr/ecorov.git; 
+cd ecorov; 
 
-## INSTALL raspimjpeg
-## raspimjpeg binary program;
-sudo cp -r bin/raspimjpeg /opt/vc/bin/
-sudo chmod 755 /opt/vc/bin/raspimjpeg
-if [ ! -e /usr/bin/raspimjpeg ]; then
-  sudo ln -s /opt/vc/bin/raspimjpeg /usr/bin/raspimjpeg
-fi
-
-
-## pipe for raspimjpeg to read command;
-if [ ! -e /var/www/FIFO ]; then
-  sudo mknod /var/www/FIFO p
-fi
+sudo mkdir -p /var/www/media
+sudo mknod /var/www/FIFO p
 sudo chmod 666 /var/www/FIFO
 
+sudo cp -r bin/raspimjpeg /opt/vc/bin/
+sudo chmod 755 /opt/vc/bin/raspimjpeg
+sudo ln -s /opt/vc/bin/raspimjpeg /usr/bin/raspimjpeg
 
-## raspimjpeg config file;
 sudo cp -r etc/raspimjpeg /etc/
 sudo chmod 644 /etc/raspimjpeg
 
 
-sudo mkdir -p /var/www/media
-
-sudo cp -R www /var/www
-
+sudo mkdir -p /dev/shm/mjpeg
+sudo su -c 'raspimjpeg > /dev/null &' 
 
 
+############################
+
+cd; sudo git clone https://github.com/withr/mjpg-streamer.git; 
+cd mjpg-streamer; 
+sudo make
+sudo make install
 
 
+cd /home/pi/mjpg-streamer
+mjpg_streamer -i "input_file.so -d 0.1 -f /dev/shm/mjpeg -n cam.jpg" -o "output_http.so -w ./www -p 8080"&
 
 
+## Run at start 
+cd; 
+cd ecorov; 
+sudo cp -r etc/rc.local /etc/
+sudo chmod 755 /etc/rc.local
 
 
-
+#############################
 # Install RPIO. RPi 3 has problem to instalL RPIO, the solution is using the following repository.
-cd; git clone https://github.com/withr/RPIO-RPi3.git; cd RPIO-RPi3
-sudo python setup.py install; cd; sudo rm -R RPIO-RPi3;
+cd; 
+git clone https://github.com/withr/RPIO-RPi3.git; 
+cd RPIO-RPi3
+sudo python setup.py install; 
 
 
+################
 
-
-
-
-
-
-
-
+sudo cp -R www/* /var/www/html/
+sudo cp etc/lighttpd.conf /etc/lighttpd/lighttpd.conf
 
 if [ ! -e /usr/bin/pythonRoot ]; then
   sudo cp /usr/bin/python2.7 /usr/bin/pythonRoot
   sudo chmod u+s /usr/bin/pythonRoot
 fi
 
-if [ ! -e /etc/lighttpd/lighttpd.conf.bak ]; then
-  sudo cp /etc/lighttpd/lighttpd.conf /etc/lighttpd/lighttpd.conf.bak
-fi
-sudo cp etc/lighttpd/* /var/www/ecorov
-sudo chmod 755 /var/www/ecorov/*
-sudo cat etc/lighttpd.conf /etc/lighttpd/lighttpd.conf
+sudo chmod 755 -R /var/www/html
 
-
-
-
-
-
-sudo killall raspimjpeg
-sudo rm /var/www/*
-
-
-
-
-
-
-## Automatically start when start RPi;
-sudo cp -r etc/rc.local /etc/
-sudo chmod 755 /etc/rc.local
-
-
-## Install mjpeg-streamer
-cd; sudo git clone https://github.com/mjpg-streamer.git
-cd mjpg-streamer/mjpg-streamer-experimental/
-sudo make
-sudo make install
-
-
-# cmake for install mjpeg-streamer
-# libjpeg8-dev for install mjpeg-streamer
-sudo apt-get install -y cmake libjpeg8-dev
-export LD_LIBRARY_PATH=/home/pi/mjpg-streamer/mjpg-streamer-experimental/
-sudo ln -s /home/pi/mjpg-streamer/mjpg-streamer-experimental/mjpg_streamer /usr/bin/mjpeg-streamer
-mjpg_streamer -o "output_http.so -w ./www -p 8080" -i "input_raspicam.so -d 0.05"
-
-
-
-## Start raspimjpeg;
-sudo mkdir -p /dev/shm/mjpeg
-sudo chmod 777 /dev/shm/mjpeg
-sudo su -c 'raspimjpeg > /dev/null &' 
