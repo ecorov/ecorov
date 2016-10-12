@@ -4,12 +4,17 @@ sudo apt-get install -y python-flup lighttpd python-setuptools python-smbus cmak
 
 ## Install raspimjpeg
 sudo mkdir -p /var/www/media
-sudo mknod /var/www/FIFO p
+
+if [ ! -e /var/www/FIFO ]; then
+  sudo mknod /var/www/FIFO p
+fi
 sudo chmod 666 /var/www/FIFO
 
 sudo cp -r bin/raspimjpeg /opt/vc/bin/
 sudo chmod 755 /opt/vc/bin/raspimjpeg
-sudo ln -s /opt/vc/bin/raspimjpeg /usr/bin/raspimjpeg
+if [ ! -e /usr/bin/raspimjpeg ]; then
+  sudo ln -s /opt/vc/bin/raspimjpeg /usr/bin/raspimjpeg
+fi
 
 sudo cp -r etc/raspimjpeg /etc/
 sudo chmod 644 /etc/raspimjpeg
@@ -23,7 +28,7 @@ sudo chmod 755 /etc/rc.local
 
 ## lighttp & fastcgi
 sudo cp -R www/* /var/www/html/
-sudo cp etc/lighttpd.conf /etc/lighttpd/lighttpd.conf
+sudo cp -r etc/lighttpd.conf /etc/lighttpd/lighttpd.conf
 
 if [ ! -e /usr/bin/pythonRoot ]; then
   sudo cp /usr/bin/python2.7 /usr/bin/pythonRoot
@@ -34,12 +39,19 @@ sudo chmod 755 -R /var/www/html
 
 # Install RPIO. RPi 3 has problem to instalL RPIO, the solution is using the following repository.
 cd; 
+if [ -d RPIO-RPi3 ]; then
+  sudo rm -R RPIO-RPi3
+fi
 git clone https://github.com/withr/RPIO-RPi3.git; 
 cd RPIO-RPi3
 sudo python setup.py install;
 
 ## Install mjpg-streamer
-cd; sudo git clone https://github.com/withr/mjpg-streamer.git; 
+cd; 
+if [ -d mjpg-streamer ]; then
+  sudo rm -R mjpg-streamer
+fi
+sudo git clone https://github.com/withr/mjpg-streamer.git; 
 cd mjpg-streamer; 
 sudo make
 sudo make install
