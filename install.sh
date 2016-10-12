@@ -1,7 +1,6 @@
 #!/bin/bash
 
-sudo apt-get update
-sudo apt-get install -y git python-flup lighttpd python-setuptools python-smbus cmake libjpeg8-dev python-dev
+sudo apt-get install -y python-flup lighttpd python-setuptools python-smbus cmake libjpeg8-dev python-dev
 
 ## Install raspimjpeg
 sudo mkdir -p /var/www/media
