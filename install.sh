@@ -19,6 +19,7 @@ fi
 sudo cp -r etc/raspimjpeg /etc/
 sudo chmod 644 /etc/raspimjpeg
 
+sudo killall raspimjpeg
 sudo mkdir -p /dev/shm/mjpeg
 sudo su -c 'raspimjpeg > /dev/null &' 
 
@@ -56,6 +57,7 @@ cd mjpg-streamer;
 sudo make
 sudo make install
 
+sudo killall mjpg-streamer
 cd /home/pi/mjpg-streamer
 mjpg_streamer -i "input_file.so -d 0.1 -f /dev/shm/mjpeg -n cam.jpg" -o "output_http.so -w ./www -p 8080"&
 
