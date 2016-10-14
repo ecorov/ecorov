@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt-get install -y python-flup lighttpd motion python-setuptools python-smbus cmake libjpeg8-dev python-dev
+sudo apt-get install -y python-flup lighttpd motion gpac python-setuptools python-smbus cmake libjpeg8-dev python-dev
 
 ## Install raspimjpeg
 sudo mkdir -p /var/www/media
