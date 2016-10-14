@@ -20,6 +20,8 @@ sudo cp -r etc/raspimjpeg /etc/
 sudo chmod 644 /etc/raspimjpeg
 
 sudo killall raspimjpeg
+sudo killall motion
+sudo modprobe bcm2835-v4l2
 sudo mkdir -p /dev/shm/mjpeg
 sudo su -c 'raspimjpeg > /dev/null &' 
 
