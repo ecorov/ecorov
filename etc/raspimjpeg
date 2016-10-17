@@ -102,7 +102,7 @@ thumb_gen vit
 # autostart: standard/idle
 # motion detection can only be true if autostart is standard
 #
-autostart standard
+autostart idle
 motion_detection false
 
 # Watchdog
