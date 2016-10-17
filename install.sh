@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt-get install -y python-flup lighttpd motion gpac python-setuptools python-smbus cmake libjpeg8-dev python-dev
+sudo apt-get install -y python-flup lighttpd python-setuptools python-smbus cmake libjpeg8-dev python-dev
 
 ## Install raspimjpeg
 sudo mkdir -p /var/www/media
@@ -20,8 +20,6 @@ sudo cp -r etc/raspimjpeg /etc/
 sudo chmod 644 /etc/raspimjpeg
 
 sudo killall raspimjpeg
-sudo killall motion
-sudo modprobe bcm2835-v4l2
 sudo mkdir -p /dev/shm/mjpeg
 sudo su -c 'raspimjpeg > /dev/null &' 
 
