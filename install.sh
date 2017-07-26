@@ -43,7 +43,7 @@ cd;
 if [ -d RPIO-RPi3 ]; then
   sudo rm -R RPIO-RPi3
 fi
-git clone https://github.com/withr/RPIO-RPi3.git; 
+git clone https://github.com/ecorov/RPIO-RPi3.git; 
 cd RPIO-RPi3
 sudo python setup.py install;
 
@@ -52,7 +52,7 @@ cd;
 if [ -d mjpg-streamer ]; then
   sudo rm -R mjpg-streamer
 fi
-sudo git clone https://github.com/withr/mjpg-streamer.git; 
+sudo git clone https://github.com/ecorov/mjpg-streamer.git; 
 cd mjpg-streamer; 
 sudo make
 sudo make install
