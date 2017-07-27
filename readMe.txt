@@ -7,6 +7,3 @@ sudo git clone https://github.com/ecorov/ecorov.git;
 sudo chmod 755 -R ecorov/; cd ecorov; ./install.sh
  
  
-
-
-Run above commands to install rov frame work.
