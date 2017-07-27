@@ -103,7 +103,7 @@ thumb_gen vit
 # motion detection can only be true if autostart is standard
 #
 autostart standard
-motion_detection false
+motion_detection true
 
 # Watchdog
 # Interval in 0.1 secs
