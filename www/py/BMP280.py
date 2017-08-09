@@ -14,10 +14,10 @@ class BMP280(object):
         self.bus = smbus.SMBus(1)
         self.addr = 0x76
     # return two bytes from data as a signed 16-bit value
-    def getShort(data, index):
+    def getShort(self, data, index):
       return ctypes.c_short((data[index+1] << 8) + data[index]).value
     # return two bytes from data as an unsigned 16-bit value
-    def getUShort(data, index):
+    def getUShort(self, data, index):
       return (data[index+1] << 8) + data[index]        
     def readAll(self):
       # Register Addresses

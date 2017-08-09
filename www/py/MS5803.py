@@ -4,7 +4,7 @@ class MS5803:
     osr = {256:0,512:2,1024:4,2048:6,4096:8}
     def __init__(self):
         self.bus = smbus.SMBus(1)
-        self.addr = 0x76
+        self.addr = 0x77
         self.reset()
         time.sleep(0.05)
         self._C = self.read_prom()
