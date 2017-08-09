@@ -7,20 +7,18 @@
 
 import smbus, ctypes     
 
-def getShort(data, index):
-  # return two bytes from data as a signed 16-bit value
-  return ctypes.c_short((data[index+1] << 8) + data[index]).value
-
-def getUShort(data, index):
-  # return two bytes from data as an unsigned 16-bit value
-  return (data[index+1] << 8) + data[index]
-
 
 class BMP280(object):
     # the address of BMP280 module on I2C bus is: 0x76
     def __init__(self):
         self.bus = smbus.SMBus(1)
         self.addr = 0x76
+    # return two bytes from data as a signed 16-bit value
+    def getShort(data, index):
+      return ctypes.c_short((data[index+1] << 8) + data[index]).value
+    # return two bytes from data as an unsigned 16-bit value
+    def getUShort(data, index):
+      return (data[index+1] << 8) + data[index]        
     def readAll(self):
       # Register Addresses
       REG_DATA    = 0xF7
@@ -39,18 +37,18 @@ class BMP280(object):
       cal2 = self.bus.read_i2c_block_data(self.addr, 0xA1, 1)
       cal3 = self.bus.read_i2c_block_data(self.addr, 0xE1, 7)
       # Convert byte data to word values
-      dig_T1 = getUShort(cal1, 0)
-      dig_T2 = getShort(cal1, 2)
-      dig_T3 = getShort(cal1, 4)
-      dig_P1 = getUShort(cal1, 6)
-      dig_P2 = getShort(cal1, 8)
-      dig_P3 = getShort(cal1, 10)
-      dig_P4 = getShort(cal1, 12)
-      dig_P5 = getShort(cal1, 14)
-      dig_P6 = getShort(cal1, 16)
-      dig_P7 = getShort(cal1, 18)
-      dig_P8 = getShort(cal1, 20)
-      dig_P9 = getShort(cal1, 22)
+      dig_T1 = self.getUShort(cal1, 0)
+      dig_T2 = self.getShort(cal1, 2)
+      dig_T3 = self.getShort(cal1, 4)
+      dig_P1 = self.getUShort(cal1, 6)
+      dig_P2 = self.getShort(cal1, 8)
+      dig_P3 = self.getShort(cal1, 10)
+      dig_P4 = self.getShort(cal1, 12)
+      dig_P5 = self.getShort(cal1, 14)
+      dig_P6 = self.getShort(cal1, 16)
+      dig_P7 = self.getShort(cal1, 18)
+      dig_P8 = self.getShort(cal1, 20)
+      dig_P9 = self.getShort(cal1, 22)
       data = self.bus.read_i2c_block_data(self.addr, REG_DATA, 6)
       pres_raw = (data[0] << 12) | (data[1] << 4) | (data[2] >> 4)
       temp_raw = (data[3] << 12) | (data[4] << 4) | (data[5] >> 4)
@@ -75,10 +73,3 @@ class BMP280(object):
         var2 = pressure * dig_P8 / 32768.0
         pressure = pressure + (var1 + var2 + dig_P7) / 16.0
       return temperature/100.0,pressure/100.0
-
-
-        
-bmp280 = BMP280()
-
-bmp280.readAll()
-

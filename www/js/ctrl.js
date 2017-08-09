@@ -1,5 +1,6 @@
-
+// password to control ECOROV
 function pwd () {
+    // tianhd
 	if (md5($( "#ctrlpwd" )[0].value) == "8caf447c1cd0db7adbec6c890eb82c70") {
 		$( "#CtrlPannel" ).css( "display", "block" ) 
 		$( "#CtrlPwd" ).css( "display", "none" ) 
@@ -9,11 +10,11 @@ function pwd () {
 	}
 }
 
+// Get video streaming
+var domain = 'http://' + document.domain
+$("#webcam").attr('src', domain + ":8080/javascript_simple.html"); 
 
-
-
-var domain = 'http://' + document.domain + ':8080/'
-
+// Propeller control
 var pwmLft0 = 1000
 var pwmRgt0 = 1000
 $("#ctrlrod").draggable ({
@@ -45,7 +46,7 @@ $("#ctrlrod").draggable ({
 				$.ajax({
 					type: 'GET',
 					dataType: 'jsonp',
-					url: domain + 'doStuff.py?lft='+pwmLft1
+					url: domain + 'ecorov.py?lft='+pwmLft1
 				});	
 			}
 			if (pwmRgt1 != pwmRgt0) {
@@ -54,7 +55,7 @@ $("#ctrlrod").draggable ({
 				$.ajax({
 					type: 'GET',
 					dataType: 'jsonp',
-					url: domain + 'doStuff.py?rgt=' + pwmRgt1
+					url: domain + 'ecorov.py?rgt=' + pwmRgt1
 				});	
 			}
 		} else {
@@ -62,7 +63,7 @@ $("#ctrlrod").draggable ({
 			$.ajax({
 				type: 'GET',
 				dataType: 'jsonp',
-				url: domain + 'doStuff.py?lft=1000&rgt=1000'
+				url: domain + 'ecorov.py?lft=1000&rgt=1000'
 			});	
 		}
 	},
@@ -71,11 +72,13 @@ $("#ctrlrod").draggable ({
 		$.ajax({
 			type: 'GET',
 			dataType: 'jsonp',
-			url: domain + 'doStuff.py?lft=1000&rgt=1000'
+			url: domain + 'ecorov.py?lft=1000&rgt=1000'
 		});				
 	}
 });
 
+
+// Step-motor control
 var p0
 $( "#slider" ).slider({
 	orientation: "vertical",
@@ -92,32 +95,31 @@ $( "#slider" ).slider({
 		$.ajax({
 			type: 'GET',
 			dataType: 'jsonp',
-			url: domain + 'doStuff.py?stp=' + step
+			url: domain + 'ecorov.py?stp=' + step
 		});	
-		console.log(domain + 'doStuff.py?stp=' + step)
+		console.log(domain + 'ecorov.py?stp=' + step)
 	}
 });
 
-
+// LED control
 $( "#led_button" ).on('click', function() {
 	var led = $('#led_button img').attr('src');
 	if (led.match(/led-1/g) != null) {
 		$.ajax({
 			type: 'GET',
 			dataType: 'jsonp',
-			url: domain + 'doStuff.py?led=on'
+			url: domain + 'ecorov.py?led=on'
 		});	
 		$('#led_button img').attr('src', "img/led-0.png");
 	} else {
 		$.ajax({
 			type: 'GET',
 			dataType: 'jsonp',
-			url: domain + 'doStuff.py?led=off'
+			url: domain + 'ecorov.py?led=off'
 		});	
 		$('#led_button img').attr('src', "img/led-1.png");
 	}
 });
-
 
 
 $("#showsys").on('click', function() {

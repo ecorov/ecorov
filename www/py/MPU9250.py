@@ -5,8 +5,7 @@
 # https://github.com/d-zenju/mpu9250/blob/master/MPU9250.py
 # from d-zenju
 
-
-import smbus, time
+import smbus, time, math
 
 class MPU9250():
     def __init__(self):
@@ -77,17 +76,16 @@ class MPU9250():
         xout = self.readLine(AK8963_ADDRESS, MAGNET_XOUT_H, MAGNET_XOUT_L)
         yout = self.readLine(AK8963_ADDRESS, MAGNET_YOUT_H, MAGNET_YOUT_L)
         zout = self.readLine(AK8963_ADDRESS, MAGNET_ZOUT_H, MAGNET_ZOUT_L)
-        #x = 1200.0 * xout / 4096.0
-        #y = 1200.0 * yout / 4096.0
-        #z = 1200.0 * zout / 4096.0
-        return [xout, yout, zout]
-
-
-
-mpu9250 = MPU9250()
-
-mpu9250.readAccel()
-mpu9250.readGyro()
-mpu9250.readTemp()
-mpu9250.readMagnet()
-
+        x = 1200.0 * xout / 4096.0
+        y = 1200.0 * yout / 4096.0
+        z = 1200.0 * zout / 4096.0
+        headingRad = math.atan2(y, x)
+        # Correct for reversed heading
+        if headingRad < 0:
+            headingRad += 2 * math.pi
+        # Check for wrap and compensate
+        elif headingRad > 2 * math.pi:
+            headingRad -= 2 * math.pi
+        # Convert to degrees from radians
+        headingDeg = headingRad * 180 / math.pi
+        return headingDeg

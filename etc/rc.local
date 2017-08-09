@@ -7,6 +7,7 @@
 # value on error.
 #
 
+sudo python /var/www/py/preview.py &
 sudo mkdir -p /dev/shm/mjpeg
 sudo su -c 'raspimjpeg > /dev/null &' 
 

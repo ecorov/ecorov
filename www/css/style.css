@@ -1,6 +1,22 @@
 body {
   margin: 0px;
 }
+
+
+#CtrlPwd {
+	position: absolute;
+	bottom: calc(50vh - 20px);
+	right: calc(50vw - 100px); 
+}
+
+
+
+#webcam {
+	width: 100vw;
+	height: 100vh;
+}
+
+
 #boundary {
   position: absolute;
   width: 300px;
@@ -11,6 +27,7 @@ body {
   bottom: 10px;
   right:10px;
 }
+
 
 #ctrlrod {
   z-index: 99;
@@ -23,6 +40,8 @@ body {
   background-color: red;
 
 }
+
+
 #slider {
 	position: absolute;
 	height: 75vh;
@@ -33,9 +52,13 @@ body {
 	opacity: 0.2;
 
 }
+
+
 .ui-widget-content, .ui-slider-handle.ui-state-default.ui-corner-all {
 	background: none;
 }
+
+
 #slider a{
 	border: 1px solid white;
 	background-color: rgb(255, 51, 0);
@@ -47,37 +70,14 @@ body {
 	
 }
 
+
 #download {
 	position: absolute;
 	top: 10px;
-	left:10px;	
+	right:10px;	
 }
 
-#camera{
-	position: absolute;
-	bottom: 10px;
-	right: calc(50vw - 109px); 
-}
 
-#led_button{
-	//position: absolute;
-	//top: 10px;
-	//right: calc(50vw - 25px); 
-}
-
-img {
-	width: 100vw;
-	height: 100vh;
-}
-#system{
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	display: inline;
-}
-#showsys, #syscmd input {
-	float: right;
-}
 #debug{
 	position: absolute;
 	top: 10px;
@@ -90,6 +90,32 @@ img {
 	margin-left: 10px;
 	margin-right: 10px;
 }
+
+#camera{
+	position: absolute;
+	bottom: 10px;
+	left: 150px; 
+}
+
+
+#led{
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	display: inline;
+}
+
+#system{
+	position: absolute;
+	top: 80px;
+	right: 10px;
+	display: inline;
+}
+
+#showsys, #syscmd input {
+	float: left;
+}
+
 #reboot_button, #shutdown_button {
 	width: auto;
 	height: 20px;
@@ -101,8 +127,4 @@ img {
 	background-color: rgb(255, 51, 0);
 }
 
-#CtrlPwd {
-	position: absolute;
-	bottom: calc(50vh - 20px);
-	right: calc(50vw - 100px); 
-}
+
