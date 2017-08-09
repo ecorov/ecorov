@@ -1,5 +1,9 @@
-#!/usr/bin/pythonRoot
 
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+
+"""
 import sys, time, urlparse, smbus, math, threading,struct
 
 from shutil import copyfile
@@ -259,4 +263,5 @@ WSGIServer(app).run()
 
 G.cleanup()
 
+"""
 
