@@ -1,72 +1,49 @@
-#!/bin/bash
+## Install lighttpd web-server
+sudo apt-get install -y lighttpd
+# use new configure file
+sudo cp ecorov/etc/lighttpd.conf /etc/lighttpd/lighttpd.conf
+# Delet the default server document 
+sudo rm -R /var/www/html
+# Copy new web-server related documents together with Python scripts 
+sudo cp -r ecorov/www/* /var/www/
+# Restart lighttpd server
+sudo /etc/init.d/lighttpd restart
 
-sudo apt-get install -y python-flup lighttpd python-setuptools python-smbus cmake libjpeg8-dev python-dev
 
-## Install raspimjpeg
-sudo mkdir -p /var/www/media
-
-if [ ! -e /var/www/FIFO ]; then
-  sudo mknod /var/www/FIFO p
-fi
-sudo chmod 666 /var/www/FIFO
-
-sudo cp -r bin/raspimjpeg /opt/vc/bin/
+# Copy raspimjpeg and make it available for system path.
+sudo cp ecorov/bin/raspimjpeg /opt/vc/bin/raspimjpeg 
 sudo chmod 755 /opt/vc/bin/raspimjpeg
-if [ ! -e /usr/bin/raspimjpeg ]; then
-  sudo ln -s /opt/vc/bin/raspimjpeg /usr/bin/raspimjpeg
-fi
-
-sudo cp -r etc/raspimjpeg /etc/
+sudo ln -s /opt/vc/bin/raspimjpeg /usr/bin/raspimjpeg
+# Copy the configure file for raspimjpeg
+sudo cp ecorov/etc/raspimjpeg /etc/raspimjpeg 
 sudo chmod 644 /etc/raspimjpeg
-
-sudo killall raspimjpeg
+# raspimjpeg need a FIFO: First In First Out
+sudo mkdir -p /var/www/media 
+sudo mknod /var/www/FIFO p
+sudo chmod 666 /var/www/FIFO
+# Creat a folder in memory (so more efficient) for store the recorded images.
 sudo mkdir -p /dev/shm/mjpeg
+sudo chmod 777 /dev/shm/mjpeg
+# start recording 
 sudo su -c 'raspimjpeg > /dev/null &' 
+# You should see the led of camera start to light. 
+# To stop raspimjpeg, using command "sudo killall raspimjpeg"
 
-## Run at start 
-sudo cp -r etc/rc.local /etc/
-sudo chmod 755 /etc/rc.local
 
-## lighttp & fastcgi
-sudo cp -R www/* /var/www/html/
-sudo cp -r etc/lighttpd.conf /etc/lighttpd/lighttpd.conf
-
-if [ ! -e /usr/bin/pythonRoot ]; then
-  sudo cp /usr/bin/python2.7 /usr/bin/pythonRoot
-  sudo chmod u+s /usr/bin/pythonRoot
-fi
-
-sudo chmod 755 -R /var/www/html
-
-# Install RPIO. RPi 3 has problem to instalL RPIO, the solution is using the following repository.
-cd; 
-if [ -d RPIO-RPi3 ]; then
-  sudo rm -R RPIO-RPi3
-fi
-git clone https://github.com/ecorov/RPIO-RPi3.git; 
-cd RPIO-RPi3
-sudo python setup.py install;
-
-## Install mjpg-streamer
-cd; 
-if [ -d mjpg-streamer ]; then
-  sudo rm -R mjpg-streamer
-fi
-sudo git clone https://github.com/ecorov/mjpg-streamer.git; 
+# The following libraries needed for compilation of mjpg-streamer
+sudo apt-get install -y cmake libjpeg8-dev
+# Download and compile mjpg-streamer
+sudo git clone https://github.com/ecorov/mjpg-streamer.git
 cd mjpg-streamer; 
-sudo make
-sudo make install
-
-if [ ! -e /usr/bin/mjpg-streamer ]; then
-  sudo ln -s mjpg-streamer /usr/bin/mjpg-streamer
-fi
-
-cd /home/pi/mjpg-streamer
+# Start to compile
+sudo make && sudo make install
+# Create a soft link, to enable system to call mjpg-streamer
+sudo ln -s mjpg-streamer/mjpg-streamer /usr/bin/mjpg-streamer
+# Start streaming
 mjpg_streamer -i "input_file.so -d 0.05 -f /dev/shm/mjpeg -n cam.jpg" -o "output_http.so -w ./www -p 8080"&
 
-echo "Install finished!"
- 
 
-
-
-
+## Enable to start recoding and streaming, etc. when start RPi.
+cd; ## go back to home directory
+sudo cp ecorov/etc/rc.local /etc/rc.local
+sudo chmod 755 /etc/rc.local
