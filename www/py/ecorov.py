@@ -1,16 +1,20 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import sys, time, urlparse, smbus, math, threading, struct
-from shutil import copyfile
+import sys, time, math, struct, threading, urlparse, smbus 
+
 from flup.server.fcgi import WSGIServer 
 from MS5803  import MS5803
 from BMP280  import BMP280
 from MPU9250 import MPU9250
 
 
-import RPi.GPIO as GPIO 
-GPIO.setmode(GPIO.BCM)
+## Define camera control functions
+def camera(cmd):
+    with open("/var/www/FIFO", "w") as f:
+        f.write("cmd")
+        f.close()
+
 
 ## Define pins for devices
 ## Step motor
@@ -75,35 +79,17 @@ time.sleep(1.0)
 
 
 
+## Define camera control functions
+def camera(cmd):
+    with open("/var/www/FIFO", "w") as f:
+        f.write(cmd)
+        f.close()
+
 def app(environ, start_response):
-    start_response("200 OK", [("Content-Type", "text/html")])
-    i = urlparse.parse_qs(environ["QUERY_STRING"])
-    yield ('&nbsp;') 
-    #  url = "stp=-300&stp=50&lft=1050&rgt=1100&led=off"
-    if "stp" in i:
-        stepMotor(int(i["stp"][0]))    
-    if "lft" in i:
-    	spd = int(i["lft"][0])
-    	if spd < -1020:
-    	    GPIO.setup(pinRlyLft1, GPIO.OUT)
-    	    GPIO.setup(pinRlyLft2, GPIO.OUT)
-            time.sleep(0.1)
-    	propLft.ChangeDutyCycle(abs(spd)/20)
-    if "rgt" in i:
-    	spd = int(i["rgt"][0])
-    	if spd < -1020:
-    	    GPIO.setup(pinRlyRgt1, GPIO.OUT)
-    	    GPIO.setup(pinRlyRgt2, GPIO.OUT)
-            time.sleep(0.1)
-    	propRgt.ChangeDutyCycle(abs(spd)/20)
-    if "led" in i:
-        if i["led"][0] == "on":
-            GPIO.setup(pinRlyLED, GPIO.OUT)
-        else:
-            GPIO.cleanup(pinRlyLED)
+  start_response("200 OK", [("Content-Type", "text/html")])
+  Q = urlparse.parse_qs(environ["QUERY_STRING"])
+  yield ('&nbsp;') # flup expects a string to be returned from this function
+  if "cam" in Q:
+    camera(Q["cam"][0])
 
 WSGIServer(app).run()
-
-GPIO.cleanup()
-
-

@@ -1,13 +1,20 @@
-## Install lighttpd web-server
-sudo apt-get install -y lighttpd
+## Install lighttpd web-server and flup
+sudo apt-get install -y lighttpd python-flup python-smbus 
 # use new configure file
 sudo cp ecorov/etc/lighttpd.conf /etc/lighttpd/lighttpd.conf
 # Delet the default server document 
 sudo rm -R /var/www/html
 # Copy new web-server related documents together with Python scripts 
 sudo cp -r ecorov/www/* /var/www/
-# Restart lighttpd server
-sudo /etc/init.d/lighttpd restart
+sudo chmod 755 /var/www/py/ecorov.py
+
+
+
+##Install RPIO from source.
+git clone https://github.com/ecorov/RPIO-RPi3.git; 
+cd RPIO-RPi3
+sudo apt-get install -y python-dev python-setuptools
+sudo python setup.py install;
 
 
 # Copy raspimjpeg and make it available for system path.
@@ -47,3 +54,7 @@ mjpg_streamer -i "input_file.so -d 0.05 -f /dev/shm/mjpeg -n cam.jpg" -o "output
 cd; ## go back to home directory
 sudo cp ecorov/etc/rc.local /etc/rc.local
 sudo chmod 755 /etc/rc.local
+
+
+# Restart lighttpd server
+sudo /etc/init.d/lighttpd restart

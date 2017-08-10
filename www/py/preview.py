@@ -34,14 +34,16 @@ def update_preview():
     df_disk  = re.sub(r"/dev/root *| /\n","", subprocess.check_output("df -h | grep root", shell=True)).split("  ")
     df_used  = "Total size: <b>%s</b>; Used: <b>%s</b>; Available:<b>%s</b>; Percentage:<b>%s</b>;"  % tuple(df_disk)
     img_ths  = subprocess.check_output("cd /var/www/ && find media -type f -name *.th.jpg", shell=True).split('\n')[:-1]
-    img_ths.sort()
+    img_ths.sort(reverse = True)
     doc_orgs = [re.sub(r'\..{5}\.th\.jpg$', "", img) for img in img_ths]
     img_blks = [img_blk.format(img_th = img_ths[i], doc_org = doc_orgs[i], doc_name = re.sub(r'^media/', "", doc_orgs[i])) for i in range(len(img_ths))]
     pag_html = template.format(style = css, disk = df_used, img_grid = ''.join(img_blks))
     with open("/var/www/preview.html", "w") as f:
         f.write(pag_html)
         f.close()
-
+        
+## Initialize
+update_preview()        
 
 state_init = subprocess.check_output("cd /var/www/ && find media -type f -name *.th.jpg", shell=True).split('\n')[:-1]
 while True:

@@ -10,9 +10,83 @@ function pwd () {
 	}
 }
 
+
 // Get video streaming
 var domain = 'http://' + document.domain
 $("#webcam").attr('src', domain + ":8080/javascript_simple.html"); 
+
+
+// LED control
+$( "#led_button" ).on('click', function() {
+	var led = $('#led_button img').attr('src');
+	if (led.match(/led-1/g) != null) {
+		$.ajax({
+			type: 'GET',
+			dataType: 'jsonp',
+			url: domain + '/ecorov.py?led=on'
+		});	
+		$('#led_button img').attr('src', "img/led-0.png");
+	} else {
+		$.ajax({
+			type: 'GET',
+			dataType: 'jsonp',
+			url: domain + '/ecorov.py?led=off'
+		});	
+		$('#led_button img').attr('src', "img/led-1.png");
+	}
+});
+
+
+
+// Camera control
+$('#image_button img').attr('src', "img/camera-1.png");
+$( "#image_button" ).on('click', function() {
+	var src_icon = $('#image_button img').attr('src');
+	if (src_icon == "img/camera-1.png") {
+		$.ajax({
+			type: 'GET',
+			dataType: 'jsonp',
+			url: domain + '/ecorov.py?cam=im'
+		});	
+        // read status_mjpeg.txt
+        var tt = setInterval(function(){
+            $.ajax({
+                async: false,
+                type: 'GET',
+                url: "status_mjpeg.txt",
+                success: function(data){
+                    console.log(data)
+                    if (data == "ready") {
+                        $('#image_button img').attr('src', "img/camera-1.png");
+                    } else {
+                        $('#image_button img').attr('src', "img/camera-0.png");
+                        clearInterval(tt)
+                    }
+                }
+            })
+          },100);
+	}
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Propeller control
 var pwmLft0 = 1000
@@ -46,7 +120,7 @@ $("#ctrlrod").draggable ({
 				$.ajax({
 					type: 'GET',
 					dataType: 'jsonp',
-					url: domain + 'ecorov.py?lft='+pwmLft1
+					url: domain + '/ecorov.py?lft='+pwmLft1
 				});	
 			}
 			if (pwmRgt1 != pwmRgt0) {
@@ -55,7 +129,7 @@ $("#ctrlrod").draggable ({
 				$.ajax({
 					type: 'GET',
 					dataType: 'jsonp',
-					url: domain + 'ecorov.py?rgt=' + pwmRgt1
+					url: domain + '/ecorov.py?rgt=' + pwmRgt1
 				});	
 			}
 		} else {
@@ -63,7 +137,7 @@ $("#ctrlrod").draggable ({
 			$.ajax({
 				type: 'GET',
 				dataType: 'jsonp',
-				url: domain + 'ecorov.py?lft=1000&rgt=1000'
+				url: domain + '/ecorov.py?lft=1000&rgt=1000'
 			});	
 		}
 	},
@@ -72,7 +146,7 @@ $("#ctrlrod").draggable ({
 		$.ajax({
 			type: 'GET',
 			dataType: 'jsonp',
-			url: domain + 'ecorov.py?lft=1000&rgt=1000'
+			url: domain + '/ecorov.py?lft=1000&rgt=1000'
 		});				
 	}
 });
@@ -95,31 +169,13 @@ $( "#slider" ).slider({
 		$.ajax({
 			type: 'GET',
 			dataType: 'jsonp',
-			url: domain + 'ecorov.py?stp=' + step
+			url: domain + '/ecorov.py?stp=' + step
 		});	
-		console.log(domain + 'ecorov.py?stp=' + step)
+		console.log(domain + '/ecorov.py?stp=' + step)
 	}
 });
 
-// LED control
-$( "#led_button" ).on('click', function() {
-	var led = $('#led_button img').attr('src');
-	if (led.match(/led-1/g) != null) {
-		$.ajax({
-			type: 'GET',
-			dataType: 'jsonp',
-			url: domain + 'ecorov.py?led=on'
-		});	
-		$('#led_button img').attr('src', "img/led-0.png");
-	} else {
-		$.ajax({
-			type: 'GET',
-			dataType: 'jsonp',
-			url: domain + 'ecorov.py?led=off'
-		});	
-		$('#led_button img').attr('src', "img/led-1.png");
-	}
-});
+
 
 
 $("#showsys").on('click', function() {
