@@ -39,7 +39,6 @@ $( "#led_button" ).on('click', function() {
 
 
 // Camera control
-$('#image_button img').attr('src', "img/camera-1.png");
 $( "#image_button" ).on('click', function() {
 	var src_icon = $('#image_button img').attr('src');
 	if (src_icon == "img/camera-1.png") {
@@ -47,34 +46,47 @@ $( "#image_button" ).on('click', function() {
 			type: 'GET',
 			dataType: 'jsonp',
 			url: domain + '/ecorov.py?cam=im'
-		});	
-        // read status_mjpeg.txt
-        var tt = setInterval(function(){
-            $.ajax({
-                async: false,
-                type: 'GET',
-                url: "status_mjpeg.txt",
-                success: function(data){
-                    console.log(data)
-                    if (data == "ready") {
-                        $('#image_button img').attr('src', "img/camera-1.png");
-                    } else {
-                        $('#image_button img').attr('src', "img/camera-0.png");
-                        clearInterval(tt)
-                    }
-                }
-            })
-          },100);
+		});
+        setTimeout(function(){ 
+            $('#image_button img').attr('src', "img/camera-0.png");
+            $('#video_button img').attr('src', "img/video-0.png");
+        }, 100);
+        
+        setTimeout(function(){ 
+            $('#image_button img').attr('src', "img/camera-1.png");
+            $('#video_button img').attr('src', "img/video-1.png");
+        }, 2000);
+       	
 	}
 });
 
-
-
-
-
-
-
-
+// Video control
+$( "#video_button" ).on('click', function() {
+	var src_icon = $('#video_button img').attr('src');
+	if (src_icon == "img/video-1.png") {
+		$.ajax({
+			type: 'GET',
+			dataType: 'jsonp',
+			url: domain + '/ecorov.py?cam=ca 1'
+		});
+        setTimeout(function(){ 
+            $('#video_button img').attr('src', "img/video-2.png");
+            $('#image_button img').attr('src', "img/camera-0.png");
+        }, 100);
+       	
+	} else if (src_icon == "img/video-2.png") {
+		$.ajax({
+			type: 'GET',
+			dataType: 'jsonp',
+			url: domain + '/ecorov.py?cam=ca 0'
+		});
+        setTimeout(function(){ 
+            $('#video_button img').attr('src', "img/video-1.png");
+            $('#image_button img').attr('src', "img/camera-1.png");
+        }, 100);
+       	
+	}
+});
 
 
 

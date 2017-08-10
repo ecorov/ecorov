@@ -7,12 +7,14 @@ Step 3: Enable camera module, I2C interface, and expand filesystem to whole disk
 
 Step 4: Install git, the clone this repository. 
 
-"sudo apt-get install -y git"
-
+sudo apt-get install -y git
 git clone https://github.com/ecorov/ecorov.git
 
 
+Step 5: run "install.sh" to install ecorov
 
+sudo chmod 755 -R ecorov/install.sh
+ecorov/install.sh
 
 
 
