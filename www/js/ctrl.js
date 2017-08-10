@@ -18,20 +18,12 @@ $("#webcam").attr('src', domain + ":8080/javascript_simple.html");
 
 // LED control
 $( "#led_button" ).on('click', function() {
-	var led = $('#led_button img').attr('src');
-	if (led.match(/led-1/g) != null) {
-		$.ajax({
-			type: 'GET',
-			dataType: 'jsonp',
-			url: domain + '/ecorov.py?led=on'
-		});	
+	var icon_src = $('#led_button img').attr('src');
+	if (icon_src == "img/led-1.png") {
+		$.ajax({type: 'GET', dataType: 'jsonp', url: 'ecorov.py?led=on'});	
 		$('#led_button img').attr('src', "img/led-0.png");
-	} else {
-		$.ajax({
-			type: 'GET',
-			dataType: 'jsonp',
-			url: domain + '/ecorov.py?led=off'
-		});	
+	} else if (icon_src == "img/led-0.png") {
+		$.ajax({type: 'GET', dataType: 'jsonp', url: 'ecorov.py?led=off'});	
 		$('#led_button img').attr('src', "img/led-1.png");
 	}
 });
@@ -40,18 +32,12 @@ $( "#led_button" ).on('click', function() {
 
 // Camera control
 $( "#image_button" ).on('click', function() {
-	var src_icon = $('#image_button img').attr('src');
-	if (src_icon == "img/camera-1.png") {
-		$.ajax({
-			type: 'GET',
-			dataType: 'jsonp',
-			url: domain + '/ecorov.py?cam=im'
-		});
-        setTimeout(function(){ 
-            $('#image_button img').attr('src', "img/camera-0.png");
-            $('#video_button img').attr('src', "img/video-0.png");
-        }, 100);
-        
+	var icon_src = $('#image_button img').attr('src');
+	if (icon_src == "img/camera-1.png") {
+		$.ajax({type: 'GET', dataType: 'jsonp', url: 'ecorov.py?cam=im'});
+        window.navigator.vibrate(50);
+        $('#image_button img').attr('src', "img/camera-0.png");
+        $('#video_button img').attr('src', "img/video-0.png");
         setTimeout(function(){ 
             $('#image_button img').attr('src', "img/camera-1.png");
             $('#video_button img').attr('src', "img/video-1.png");
@@ -62,29 +48,17 @@ $( "#image_button" ).on('click', function() {
 
 // Video control
 $( "#video_button" ).on('click', function() {
-	var src_icon = $('#video_button img').attr('src');
-	if (src_icon == "img/video-1.png") {
-		$.ajax({
-			type: 'GET',
-			dataType: 'jsonp',
-			url: domain + '/ecorov.py?cam=ca 1'
-		});
-        setTimeout(function(){ 
-            $('#video_button img').attr('src', "img/video-2.png");
-            $('#image_button img').attr('src', "img/camera-0.png");
-        }, 100);
-       	
-	} else if (src_icon == "img/video-2.png") {
-		$.ajax({
-			type: 'GET',
-			dataType: 'jsonp',
-			url: domain + '/ecorov.py?cam=ca 0'
-		});
-        setTimeout(function(){ 
-            $('#video_button img').attr('src', "img/video-1.png");
-            $('#image_button img').attr('src', "img/camera-1.png");
-        }, 100);
-       	
+	var icon_src = $('#video_button img').attr('src');
+	if (icon_src == "img/video-1.png") {
+		$.ajax({type: 'GET', dataType: 'jsonp', url: 'ecorov.py?cam=ca 1'});
+        window.navigator.vibrate(50);
+        $('#video_button img').attr('src', "img/video-2.png");
+        $('#image_button img').attr('src', "img/camera-0.png");	
+	} else if (icon_src == "img/video-2.png") {
+		$.ajax({type: 'GET', dataType: 'jsonp', url: 'ecorov.py?cam=ca 0'});
+        window.navigator.vibrate(50);
+        $('#video_button img').attr('src', "img/video-1.png");
+        $('#image_button img').attr('src', "img/camera-1.png");
 	}
 });
 

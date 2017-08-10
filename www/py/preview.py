@@ -9,6 +9,7 @@ template = """
         </style>
     </head>
     <body>
+        <a class="menu-item" style="float: right;" href="/index.html"><h2>HOME</h2></a>
         <br>{disk}<br><br>
         {img_grid}
     </body>

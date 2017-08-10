@@ -58,5 +58,4 @@ sudo chmod 755 /etc/rc.local
 
 
 # Restart lighttpd server
-# sudo /etc/init.d/lighttpd restart
-sudo reboot
+sudo /etc/init.d/lighttpd restart
