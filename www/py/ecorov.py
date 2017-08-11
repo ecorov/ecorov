@@ -69,7 +69,7 @@ GPIO.output(pinLED, 1)
 ##############################
 ## For reading sensor data
 import time, threading, smbus, ctypes
-from shutil import copyfile
+# from shutil import copyfile
 from MS5803  import MS5803
 from BMP280  import BMP280
 from MPU9250 import MPU9250
@@ -82,12 +82,6 @@ def readBMP280():
         thread.data =  bmp280.readAll()
         thread.mbar = thread.data['mbar']
         thread.temp = thread.data['temp']
-        with open("/var/www/js/sensor_rov_pres.html", "w") as f:
-            f.write("ROV pressure: " + str(int(thread.mbar)))
-            f.close()
-        with open("/var/www/js/sensor_rov_temp.html", "w") as f:
-            f.write("ROV temperature: " + str(int(thread.temp)))
-            f.close()
         time.sleep(0.5)
 
 tReadBMP280 = threading.Thread(target=readBMP280)
@@ -100,11 +94,8 @@ def readMPU9250():
     mpu9250 = MPU9250()
     while getattr(thread, "do_run", True):
         thread.data =  mpu9250.readMagnet()
-        thread.head =  thread.data['heading']
-        with open("/var/www/js/sensor_rov_heading.html", "w") as f:
-            f.write("ROV heading: " + str(int(thread.head)))
-            f.close()
-        time.sleep(0.5)
+        thread.heading =  thread.data['heading']
+        time.sleep(0.2)
 
 tReadMPU9250 = threading.Thread(target=readMPU9250)
 tReadMPU9250.start()
@@ -118,17 +109,29 @@ def readMS5803():
         thread.data = ms5803.read()
         thread.mbar = thread.data['mbar']
         thread.temp = thread.data['temp']
-        with open("/var/www/js/sensor_water_pres.html", "w") as f:
-            f.write("Water pressure: " + str(int(thread.mbar)))
-            f.close()
-        with open("/var/www/js/sensor_water_temp.html", "w") as f:
-            f.write("Water temperature: " + str(int(thread.temp)))
-            f.close()
         time.sleep(0.5)
 
 tReadMS5803 = threading.Thread(target=readMS5803)
 tReadMS5803.start()
 # tReadMS5803.do_run = False
+
+## record sensor data
+def writeSensors():
+    thread = threading.currentThread() 
+    while getattr(thread, "do_run", True):
+        info = "ROV pressure: " + str(int(tReadBMP280.mbar)) \
+            + "; ROV temperature: " + str(int(tReadBMP280.temp)) \
+            + "; ROV heading: " + str(int(tReadMPU9250.heading)) \
+            + "; Water temperature: " + str(int(tReadMS5803.temp)) \
+            + "; Water pressure: " + str(int(tReadMS5803.mbar)) 
+        with open("/var/www/js/sensors_data.html", "w") as f:
+            f.write(info)
+            f.close()
+        time.sleep(0.5)
+
+tWriteSensors = threading.Thread(target=writeSensors)
+tWriteSensors.start()
+
 
 
 
