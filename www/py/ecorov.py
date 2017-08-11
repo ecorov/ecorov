@@ -92,6 +92,7 @@ def readBMP280():
         with open("/dev/shm/mjpeg/sensor_rov_temp.html", "w") as f:
             f.write("ROV temperature: " + str(int(thread.temp)))
             f.close()
+        copyfile("/dev/shm/mjpeg/sensor_rov_temp.html", "/var/www/js/sensor_rov_temp.html")
         time.sleep(0.5)
 
 tReadBMP280 = threading.Thread(target=readBMP280)

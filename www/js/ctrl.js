@@ -24,6 +24,7 @@ $(document).ready(function(){
         $("#water_temp").load("js/sensor_water_temp.html");
         $("#water_pres").load("js/sensor_water_pres.html");
         $("#rov_heading").load("js/sensor_rov_heading.html");
+        // Red spot to show the position of ROV
         var theta = parseInt($("#rov_heading").text().replace("ROV heading: ", ""))
         x = Math.cos((90+360-theta)/180*Math.PI)*150
         y = Math.sin((90+360-theta)/180*Math.PI)*150
@@ -33,18 +34,22 @@ $(document).ready(function(){
 
 
 
-    
-    
-    
-
 // LED control
 $( "#led_button" ).on('click', function() {
 	var icon_src = $('#led_button img').attr('src');
 	if (icon_src == "img/led-1.png") {
-		$.ajax({type: 'GET', dataType: 'jsonp', url: 'ecorov.py?led=on'});	
+		$.ajax({
+            type: 'GET', 
+            dataType: 'jsonp', 
+            url: 'ecorov.py?led=on'
+        });	
 		$('#led_button img').attr('src', "img/led-0.png");
 	} else if (icon_src == "img/led-0.png") {
-		$.ajax({type: 'GET', dataType: 'jsonp', url: 'ecorov.py?led=off'});	
+		$.ajax({
+            type: 'GET', 
+            dataType: 'jsonp', 
+            url: 'ecorov.py?led=off'
+        });	
 		$('#led_button img').attr('src', "img/led-1.png");
 	}
 });
@@ -55,7 +60,11 @@ $( "#led_button" ).on('click', function() {
 $( "#image_button" ).on('click', function() {
 	var icon_src = $('#image_button img').attr('src');
 	if (icon_src == "img/camera-1.png") {
-		$.ajax({type: 'GET', dataType: 'jsonp', url: 'ecorov.py?cam=im'});
+		$.ajax({
+            type: 'GET', 
+            dataType: 'jsonp', 
+            url: 'ecorov.py?cam=im'
+        });
         window.navigator.vibrate(50);
         $('#image_button img').attr('src', "img/camera-0.png");
         $('#video_button img').attr('src', "img/video-0.png");
@@ -67,29 +76,31 @@ $( "#image_button" ).on('click', function() {
 	}
 });
 
+
+
 // Video control
 $( "#video_button" ).on('click', function() {
 	var icon_src = $('#video_button img').attr('src');
 	if (icon_src == "img/video-1.png") {
-		$.ajax({type: 'GET', dataType: 'jsonp', url: 'ecorov.py?cam=ca 1'});
+		$.ajax({
+            type: 'GET', 
+            dataType: 'jsonp', 
+            url: 'ecorov.py?cam=ca 1'
+        });
         window.navigator.vibrate(50);
         $('#video_button img').attr('src', "img/video-2.png");
         $('#image_button img').attr('src', "img/camera-0.png");	
 	} else if (icon_src == "img/video-2.png") {
-		$.ajax({type: 'GET', dataType: 'jsonp', url: 'ecorov.py?cam=ca 0'});
+		$.ajax({
+            type: 'GET', 
+            dataType: 'jsonp', 
+            url: 'ecorov.py?cam=ca 0'
+        });
         window.navigator.vibrate(50);
         $('#video_button img').attr('src', "img/video-1.png");
         $('#image_button img').attr('src', "img/camera-1.png");
 	}
 });
-
-
-
-
-
-
-
-
 
 
 
@@ -124,10 +135,9 @@ $("#ctrlrod").draggable ({
 			if (pwmLft1 != pwmLft0) {
 				pwmLft0 = pwmLft1
 				$("#debug").text('Left: '+ pwmLft1);
-				$.ajax({
-					type: 'GET',
+				$.ajax({type: 'GET',
 					dataType: 'jsonp',
-					url: domain + '/ecorov.py?lft='+pwmLft1
+					url: 'ecorov.py?lft=' + pwmLft1
 				});	
 			}
 			if (pwmRgt1 != pwmRgt0) {
@@ -136,7 +146,7 @@ $("#ctrlrod").draggable ({
 				$.ajax({
 					type: 'GET',
 					dataType: 'jsonp',
-					url: domain + '/ecorov.py?rgt=' + pwmRgt1
+					url: 'ecorov.py?rgt=' + pwmRgt1
 				});	
 			}
 		} else {
@@ -144,7 +154,7 @@ $("#ctrlrod").draggable ({
 			$.ajax({
 				type: 'GET',
 				dataType: 'jsonp',
-				url: domain + '/ecorov.py?lft=1000&rgt=1000'
+				url: 'ecorov.py?lft=1000&rgt=1000'
 			});	
 		}
 	},
@@ -153,7 +163,7 @@ $("#ctrlrod").draggable ({
 		$.ajax({
 			type: 'GET',
 			dataType: 'jsonp',
-			url: domain + '/ecorov.py?lft=1000&rgt=1000'
+			url: 'ecorov.py?lft=1000&rgt=1000'
 		});				
 	}
 });
@@ -176,9 +186,9 @@ $( "#slider" ).slider({
 		$.ajax({
 			type: 'GET',
 			dataType: 'jsonp',
-			url: domain + '/ecorov.py?stp=' + step
+			url: 'ecorov.py?stp=' + step
 		});	
-		console.log(domain + '/ecorov.py?stp=' + step)
+		//console.log(domain + '/ecorov.py?stp=' + step)
 	}
 });
 
