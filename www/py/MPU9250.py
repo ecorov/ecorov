@@ -88,4 +88,4 @@ class MPU9250():
             headingRad -= 2 * math.pi
         # Convert to degrees from radians
         headingDeg = headingRad * 180 / math.pi
-        return headingDeg
+        return {'heading':headingDeg}
