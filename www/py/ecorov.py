@@ -99,6 +99,7 @@ def readMPU9250():
 
 tReadMPU9250 = threading.Thread(target=readMPU9250)
 tReadMPU9250.start()
+time.sleep(2)
 # tReadMPU9250.do_run = False
 
 # MS5803
@@ -154,5 +155,13 @@ def app(environ, start_response):
   yield ('&nbsp;') # flup expects a string to be returned from this function
   if "cam" in Q:
     camera(Q["cam"][0])
+  if "led" in Q:
+    if Q["led"][0] == "on":
+        pwm.set_servo(26, 20000)
+    else:
+        pwm.set_servo(26, 0)
+
 
 WSGIServer(app).run()
+
+
