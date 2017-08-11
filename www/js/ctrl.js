@@ -16,6 +16,27 @@ var domain = 'http://' + document.domain
 $("#webcam").attr('src', domain + ":8080/javascript_simple.html"); 
 
 
+// Read sensor data
+$(document).ready(function(){
+    setInterval(function() {
+        $("#rov_temp").load("js/sensor_rov_temp.html");
+        $("#rov_pres").load("js/sensor_rov_pres.html");
+        $("#water_temp").load("js/sensor_water_temp.html");
+        $("#water_pres").load("js/sensor_water_pres.html");
+        $("#rov_heading").load("js/sensor_rov_heading.html");
+        var theta = parseInt($("#rov_heading").text().replace("ROV heading: ", ""))
+        x = Math.cos((90+360-theta)/180*Math.PI)*150
+        y = Math.sin((90+360-theta)/180*Math.PI)*150
+        $("#rovHeading").attr("style", "right:"+parseInt(150-x)+"px;bottom:" + parseInt(150+y) + "px;background-color:red;width:20px;height:20px;position: absolute;border-radius: 10px;")
+    }, 500);    
+});
+
+
+
+    
+    
+    
+
 // LED control
 $( "#led_button" ).on('click', function() {
 	var icon_src = $('#led_button img').attr('src');

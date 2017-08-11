@@ -56,6 +56,9 @@ cd;
 sudo cp ecorov/etc/rc.local /etc/rc.local
 sudo chmod 755 /etc/rc.local
 
-
+## Create a copy of Python to enable it run script as root.
+sudo cp /usr/bin/python2.7 /usr/bin/pythonRoot
+sudo chmod u+s /usr/bin/pythonRoot
+  
 # Restart lighttpd server
 sudo /etc/init.d/lighttpd restart

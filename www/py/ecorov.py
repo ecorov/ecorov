@@ -1,90 +1,156 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import sys, time, math, struct, threading, urlparse, smbus 
+## Basic libraries
+import sys, time, math, struct
 
-from flup.server.fcgi import WSGIServer 
+
+
+
+##############################
+## PWM signal
+from RPIO import PWM 
+PWM.set_loglevel(PWM.LOG_LEVEL_ERRORS)
+pwm = PWM.Servo(pulse_incr_us=1)
+## Brushless motors
+pinPropLft = 27
+pinPropRgt = 22
+## Relay signal input
+pinRlyLft1 = 12
+pinRlyLft2 = 13
+pinRlyRgt1 = 5
+pinRlyRgt2 = 6
+## Initialize
+s.set_servo(pinPropLft, 1000)
+time.sleep(1)
+s.set_servo(pinPropRgt, 1000)
+time.sleep(1)
+
+  
+
+##############################
+## Step motor
+import RPi.GPIO as GPIO
+GPIO.setmode(GPIO.BCM)
+## pins
+pinStp = 21
+pinDir = 20
+pinSlp = 26
+#3 setup pin as out & initialize as low level 
+GPIO.setup(pinStp, GPIO.OUT, initial=0)
+GPIO.setup(pinDir, GPIO.OUT, initial=0)
+GPIO.setup(pinSlp, GPIO.OUT, initial=0)
+## Function for step motor
+def stepMotor(step):
+    GPIO.output(pinSlp, 1) ## wakeup
+    time.sleep(0.1)
+    # Direction
+    if step < 0:
+        GPIO.output(pinDir, 0)
+    else:
+        GPIO.output(pinDir, 1)
+    # step
+    for i in range(1, int(abs(step) * 1.8 *100)):
+        GPIO.output(pinStp, 1)
+        GPIO.output(pinStp, 0)
+        time.sleep(0.0001)
+    GPIO.output(pinSlp, 0) ## sleep
+    return
+
+
+#############################
+## LED light
+pinLED = 19
+GPIO.setup(pinLED, GPIO.OUT, initial=1) ## Low level will trigger the relay   
+GPIO.output(pinLED, 0)
+time.sleep(1)
+GPIO.output(pinLED, 1)
+    
+    
+
+##############################
+## For reading sensor data
+import time, threading, smbus 
+from shutil import copyfile
 from MS5803  import MS5803
 from BMP280  import BMP280
 from MPU9250 import MPU9250
 
 
-## Define camera control functions
-def camera(cmd):
-    with open("/var/www/FIFO", "w") as f:
-        f.write("cmd")
-        f.close()
+## BMP280
+def readBMP280():
+    thread = threading.currentThread() 
+    bmp280 = BMP280()
+    while getattr(thread, "do_run", True):
+        thread.data =  bmp280.readAll()
+        thread.mbar = thread.data['mbar']
+        thread.temp = thread.data['temp']
+        with open("/dev/shm/mjpeg/sensor_rov_pres.html", "w") as f:
+            f.write("ROV pressure: " + str(int(thread.mbar)))
+            f.close()
+        copyfile("/dev/shm/mjpeg/sensor_rov_pres.html", "/var/www/js/sensor_rov_pres.html")
+        with open("/dev/shm/mjpeg/sensor_rov_temp.html", "w") as f:
+            f.write("ROV temperature: " + str(int(thread.temp)))
+            f.close()
+        time.sleep(0.5)
 
+tReadBMP280 = threading.Thread(target=readBMP280)
+tReadBMP280.start()
+# tReadBMP280.do_run = False
 
-## Define pins for devices
-## Step motor
-pinStp = 21
-pinDir = 20
-pinSlp = 26
-## LED light
-pinRlyLED = 19
-## Brushless motors
-pinLft = 27
-pinRgt = 22
-## 4-channels Relay
-pinRlyLft1 = 12
-pinRlyLft2 = 13
-pinRlyRgt1 = 5
-pinRlyRgt2 = 6
-## Water sensor
-pinWater = 4
+# MPU9250
+def readMPU9250():
+    thread = threading.currentThread() 
+    mpu9250 = MPU9250()
+    while getattr(thread, "do_run", True):
+        thread.data =  mpu9250.readMagnet()
+        with open("/dev/shm/mjpeg/sensor_rov_heading.html", "w") as f:
+            f.write("ROV heading: " + str(int(thread.data)))
+            f.close()
+        copyfile("/dev/shm/mjpeg/sensor_rov_heading.html", "/var/www/js/sensor_rov_heading.html")
+        time.sleep(0.5)
 
+tReadMPU9250 = threading.Thread(target=readMPU9250)
+tReadMPU9250.start()
+# tReadMPU9250.do_run = False
 
-## Initialize step motor
-GPIO.setup (pinStp, GPIO.OUT)
-GPIO.setup (pinDir, GPIO.OUT)
-GPIO.setup (pinSlp, GPIO.OUT)
-GPIO.output(pinSlp, False)
-## Function for step motor
-def stepMotor(step):
-    GPIO.output(pinSlp, True)
-    time.sleep(0.1)
-    # Direction
-    if step < 0:
-        GPIO.output(pinDir, False)
-    else:
-        GPIO.output(pinDir, True)
-    # step
-    for i in range(1, int(abs(step) * 1.8 *100)):
-        GPIO.output(pinStp, True)
-        GPIO.output(pinStp, False)
-        time.sleep(0.0001)
-    GPIO.output(pinSlp, False)
-    return
+# MS5803
+def readMS5803():
+    thread = threading.currentThread()   
+    ms5803 = MS5803() 
+    while getattr(thread, "do_run", True):
+        thread.data = ms5803.read()
+        thread.mbar = thread.data['mbar']
+        thread.temp = thread.data['temp']
+        with open("/dev/shm/mjpeg/sensor_water_pres.html", "w") as f:
+            f.write("Water pressure: " + str(int(thread.mbar)))
+            f.close()
+        copyfile("/dev/shm/mjpeg/sensor_water_pres.html", "/var/www/js/sensor_water_pres.html")
+        with open("/dev/shm/mjpeg/sensor_water_temp.html", "w") as f:
+            f.write("Water temperature: " + str(int(thread.temp)))
+            f.close()
+        copyfile("/dev/shm/mjpeg/sensor_water_temp.html", "/var/www/js/sensor_water_temp.html")
+        time.sleep(0.5)
 
-    
-## Test LED 
-GPIO.setup(pinRlyLED, GPIO.OUT)
-time.sleep(1)
-GPIO.cleanup(pinRlyLED)
-GPIO.setup(pinRlyLED, GPIO.OUT)
-time.sleep(1)
-GPIO.cleanup(pinRlyLED)
-
-
-## Initialize brushless motor
-GPIO.setup(pinLft, GPIO.OUT)
-GPIO.setup(pinRgt, GPIO.OUT)
-propLft = GPIO.PWM(pinLft, 500)
-propRgt = GPIO.PWM(pinRgt, 500)
-propLft.start(50)
-time.sleep(1.0)
-propRgt.start(50)
-time.sleep(1.0)
+tReadMS5803 = threading.Thread(target=readMS5803)
+tReadMS5803.start()
+# tReadMS5803.do_run = False
 
 
 
+#####################################
 ## Define camera control functions
 def camera(cmd):
     with open("/var/www/FIFO", "w") as f:
         f.write(cmd)
         f.close()
 
+        
+########################################
+## fastcgi-python server
+from flup.server.fcgi import WSGIServer 
+import urlparse
+## app
 def app(environ, start_response):
   start_response("200 OK", [("Content-Type", "text/html")])
   Q = urlparse.parse_qs(environ["QUERY_STRING"])
