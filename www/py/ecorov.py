@@ -21,9 +21,9 @@ pinRlyLft2 = 13
 pinRlyRgt1 = 5
 pinRlyRgt2 = 6
 ## Initialize
-s.set_servo(pinPropLft, 1000)
+pwm.set_servo(pinPropLft, 1000)
 time.sleep(1)
-s.set_servo(pinPropRgt, 1000)
+pwm.set_servo(pinPropRgt, 1000)
 time.sleep(1)
 
   
