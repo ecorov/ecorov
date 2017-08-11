@@ -100,8 +100,9 @@ def readMPU9250():
     mpu9250 = MPU9250()
     while getattr(thread, "do_run", True):
         thread.data =  mpu9250.readMagnet()
+        thread.head =  thread.data['heading']
         with open("/var/www/js/sensor_rov_heading.html", "w") as f:
-            f.write("ROV heading: " + str(int(thread.data)))
+            f.write("ROV heading: " + str(int(thread.head)))
             f.close()
         time.sleep(0.5)
 
