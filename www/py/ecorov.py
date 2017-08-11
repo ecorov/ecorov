@@ -99,7 +99,6 @@ def readMPU9250():
 
 tReadMPU9250 = threading.Thread(target=readMPU9250)
 tReadMPU9250.start()
-time.sleep(2)
 # tReadMPU9250.do_run = False
 
 # MS5803
@@ -121,10 +120,10 @@ def writeSensors():
     thread = threading.currentThread() 
     while getattr(thread, "do_run", True):
         info = "ROV pressure: " + str(int(tReadBMP280.mbar)) \
-            + "; ROV temperature: " + str(int(tReadBMP280.temp)) \
-            + "; ROV heading: " + str(int(tReadMPU9250.heading)) \
-            + "; Water temperature: " + str(int(tReadMS5803.temp)) \
-            + "; Water pressure: " + str(int(tReadMS5803.mbar)) 
+            + "<br> ROV temperature: " + str(int(tReadBMP280.temp)) \
+            + "<br> ROV heading: " + str(int(tReadMPU9250.heading)) \
+            + "<br> Water temperature: " + str(int(tReadMS5803.temp)) \
+            + "<br> Water pressure: " + str(int(tReadMS5803.mbar)) 
         with open("/var/www/js/sensors_data.html", "w") as f:
             f.write(info)
             f.close()
@@ -150,18 +149,17 @@ from flup.server.fcgi import WSGIServer
 import urlparse
 ## app
 def app(environ, start_response):
-  start_response("200 OK", [("Content-Type", "text/html")])
-  Q = urlparse.parse_qs(environ["QUERY_STRING"])
-  yield ('&nbsp;') # flup expects a string to be returned from this function
-  if "cam" in Q:
-    camera(Q["cam"][0])
-  if "led" in Q:
-    if Q["led"][0] == "on":
-        pwm.set_servo(26, 20000)
-    else:
-        pwm.set_servo(26, 0)
+    start_response("200 OK", [("Content-Type", "text/html")])
+    Q = urlparse.parse_qs(environ["QUERY_STRING"])
+    yield ('&nbsp;') # flup expects a string to be returned from this function
+    if "cam" in Q:
+        camera(Q["cam"][0])
+    if "led" in Q:
+        if Q["led"][0] == "on":
+            pwm.set_servo(26, 20000)
+        else:
+            pwm.set_servo(26, 0)
 
 
 WSGIServer(app).run()
-
 
