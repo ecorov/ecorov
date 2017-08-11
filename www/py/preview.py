@@ -32,8 +32,9 @@ img_blk = """
         
         
 def update_preview():
-    df_disk  = re.sub(r"/dev/root *| /\n","", subprocess.check_output("df -h | grep root", shell=True)).split("  ")
-    df_used  = "Total size: <b>%s</b>; Used: <b>%s</b>; Available:<b>%s</b>; Percentage:<b>%s</b>;"  % tuple(df_disk)
+    df_Disk  = re.sub(r"/dev/root *| /\n","", subprocess.check_output("df -h | grep root", shell=True))
+    df_disk  = re.split(" +", df_Disk)
+    df_used  = "Total size: <b>%s</b>; Used: <b>%s</b>; Available: <b>%s</b>; Percentage: <b>%s</b>;"  % tuple(df_disk)
     img_ths  = subprocess.check_output("cd /var/www/ && find media -type f -name *.th.jpg", shell=True).split('\n')[:-1]
     img_ths.sort(reverse = True)
     doc_orgs = [re.sub(r'\..{5}\.th\.jpg$', "", img) for img in img_ths]

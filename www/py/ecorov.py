@@ -70,7 +70,7 @@ GPIO.output(pinLED, 1)
 
 ##############################
 ## For reading sensor data
-import time, threading, smbus 
+import time, threading, smbus, ctypes
 from shutil import copyfile
 from MS5803  import MS5803
 from BMP280  import BMP280
@@ -117,6 +117,7 @@ tReadMPU9250.start()
 # MS5803
 def readMS5803():
     thread = threading.currentThread()   
+    ms5803 = MS5803() 
     ms5803 = MS5803() 
     while getattr(thread, "do_run", True):
         thread.data = ms5803.read()
