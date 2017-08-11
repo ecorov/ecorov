@@ -130,6 +130,7 @@ def writeSensors():
         time.sleep(0.5)
 
 tWriteSensors = threading.Thread(target=writeSensors)
+time.sleep(1)
 tWriteSensors.start()
 
 
