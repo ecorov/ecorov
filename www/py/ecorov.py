@@ -82,14 +82,12 @@ def readBMP280():
         thread.data =  bmp280.readAll()
         thread.mbar = thread.data['mbar']
         thread.temp = thread.data['temp']
-        with open("/dev/shm/mjpeg/sensor_rov_pres.html", "w") as f:
+        with open("/var/www/js/sensor_rov_pres.html", "w") as f:
             f.write("ROV pressure: " + str(int(thread.mbar)))
             f.close()
-        copyfile("/dev/shm/mjpeg/sensor_rov_pres.html", "/var/www/js/sensor_rov_pres.html")
-        with open("/dev/shm/mjpeg/sensor_rov_temp.html", "w") as f:
+        with open("/var/www/js/sensor_rov_temp.html", "w") as f:
             f.write("ROV temperature: " + str(int(thread.temp)))
             f.close()
-        copyfile("/dev/shm/mjpeg/sensor_rov_temp.html", "/var/www/js/sensor_rov_temp.html")
         time.sleep(0.5)
 
 tReadBMP280 = threading.Thread(target=readBMP280)
@@ -102,10 +100,9 @@ def readMPU9250():
     mpu9250 = MPU9250()
     while getattr(thread, "do_run", True):
         thread.data =  mpu9250.readMagnet()
-        with open("/dev/shm/mjpeg/sensor_rov_heading.html", "w") as f:
+        with open("/var/www/js/sensor_rov_heading.html", "w") as f:
             f.write("ROV heading: " + str(int(thread.data)))
             f.close()
-        copyfile("/dev/shm/mjpeg/sensor_rov_heading.html", "/var/www/js/sensor_rov_heading.html")
         time.sleep(0.5)
 
 tReadMPU9250 = threading.Thread(target=readMPU9250)
@@ -120,14 +117,12 @@ def readMS5803():
         thread.data = ms5803.read()
         thread.mbar = thread.data['mbar']
         thread.temp = thread.data['temp']
-        with open("/dev/shm/mjpeg/sensor_water_pres.html", "w") as f:
+        with open("/var/www/js/sensor_water_pres.html", "w") as f:
             f.write("Water pressure: " + str(int(thread.mbar)))
             f.close()
-        copyfile("/dev/shm/mjpeg/sensor_water_pres.html", "/var/www/js/sensor_water_pres.html")
-        with open("/dev/shm/mjpeg/sensor_water_temp.html", "w") as f:
+        with open("/var/www/js/sensor_water_temp.html", "w") as f:
             f.write("Water temperature: " + str(int(thread.temp)))
             f.close()
-        copyfile("/dev/shm/mjpeg/sensor_water_temp.html", "/var/www/js/sensor_water_temp.html")
         time.sleep(0.5)
 
 tReadMS5803 = threading.Thread(target=readMS5803)
