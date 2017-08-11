@@ -4,7 +4,9 @@ Step 1: Burn image raspbian-jessie-lite (2017-05-05) into RPi. Create a file cal
 Step 2: Access to RPi using SSH, and enable it to access internet, then update the system.
 
 
-Step 3: Enable camera module, I2C interface, and expand filesystem to whole disk, then restart RPi. "sudo raspi-config"
+Step 3: Enable camera module, I2C interface, and expand filesystem to whole disk, then restart RPi. 
+
+sudo raspi-config
 
 
 Step 4: Install git, the clone this repository. 
