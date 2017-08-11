@@ -10,7 +10,6 @@ body {
 }
 
 
-
 #webcam {
 	width: 100vw;
 	height: 100vh;
@@ -53,11 +52,9 @@ body {
 
 }
 
-
 .ui-widget-content, .ui-slider-handle.ui-state-default.ui-corner-all {
 	background: none;
 }
-
 
 #slider a{
 	border: 1px solid white;
@@ -104,27 +101,4 @@ body {
 	left: 10px;
 	display: inline;
 }
-
-#system{
-	position: absolute;
-	top: 80px;
-	right: 10px;
-	display: inline;
-}
-
-#showsys, #syscmd input {
-	float: left;
-}
-
-#reboot_button, #shutdown_button {
-	width: auto;
-	height: 20px;
-	border-radius: 5px;
-	padding-left: 20px;
-	padding-right: 20px;
-	margin-top: 20px;
-	border-style: none;
-	background-color: rgb(255, 51, 0);
-}
-
 
