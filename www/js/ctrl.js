@@ -183,18 +183,6 @@ $( "#slider" ).slider({
 			dataType: 'jsonp',
 			url: 'ecorov.py?stp=' + step
 		});	
-		//console.log(domain + '/ecorov.py?stp=' + step)
 	}
-});
-
-
-
-
-$("#showsys").on('click', function() {
-	if ($( "#syscmd" ).css( "display" ) == "none") {
-		$( "#syscmd" ).css( "display", "block" ) 
-  } else if ($( "#syscmd" ).css( "display" ) == "block") {
-		$( "#syscmd" ).css( "display", "none" ) 
-  }
 });
 
