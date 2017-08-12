@@ -5,31 +5,24 @@
 import sys, time, math, struct
 
 
-##############################
-## PWM signal
-from RPIO import PWM 
-PWM.set_loglevel(PWM.LOG_LEVEL_ERRORS)
-pwm = PWM.Servo(pulse_incr_us=1)
-## Brushless motors
-pinPropLft = 27
-pinPropRgt = 22
-## Relay signal input
-pinRlyLft1 = 12
-pinRlyLft2 = 13
-pinRlyRgt1 = 5
-pinRlyRgt2 = 6
-## Initialize
-pwm.set_servo(pinPropLft, 1000)
-time.sleep(1)
-pwm.set_servo(pinPropRgt, 1000)
-time.sleep(1)
+## RPi.GPIO
+import RPi.GPIO as GPIO
+GPIO.setmode(GPIO.BCM)
 
-  
+
+
+#############################
+## LED light
+pinLED = 19
+GPIO.setup(pinLED, GPIO.OUT, initial=1) ## Low level will trigger the relay   
+GPIO.output(pinLED, 0)
+time.sleep(1)
+GPIO.output(pinLED, 1)
+
+
 
 ##############################
 ## Step motor
-import RPi.GPIO as GPIO
-GPIO.setmode(GPIO.BCM)
 ## pins
 pinStp = 21
 pinDir = 20
@@ -56,15 +49,34 @@ def stepMotor(step):
     return
 
 
-#############################
-## LED light
-pinLED = 19
-GPIO.setup(pinLED, GPIO.OUT, initial=1) ## Low level will trigger the relay   
-GPIO.output(pinLED, 0)
+
+    
+##############################
+## PWM signal
+from RPIO import PWM 
+PWM.set_loglevel(PWM.LOG_LEVEL_ERRORS)
+pwm = PWM.Servo(pulse_incr_us=1)
+
+## Brushless motors
+pinPropLft = 27
+pinPropRgt = 22
+## Relay signal input
+pinRlyLft1 = 12
+pinRlyLft2 = 13
+pinRlyRgt1 = 5
+pinRlyRgt2 = 6
+GPIO.setup(pinRlyLft1, GPIO.OUT, initial=1)
+GPIO.setup(pinRlyLft2, GPIO.OUT, initial=1)
+GPIO.setup(pinRlyRgt1, GPIO.OUT, initial=1)
+GPIO.setup(pinRlyRgt2, GPIO.OUT, initial=1)
+## Initialize
+pwm.set_servo(pinPropLft, 1000)
 time.sleep(1)
-GPIO.output(pinLED, 1)
-    
-    
+pwm.set_servo(pinPropRgt, 1000)
+time.sleep(1)
+
+  
+  
 
 ##############################
 ## For reading sensor data
@@ -144,6 +156,7 @@ def camera(cmd):
         f.close()
 
         
+        
 ########################################
 ## fastcgi-python server
 from flup.server.fcgi import WSGIServer 
@@ -170,7 +183,7 @@ def app(environ, start_response):
     	else:
     	    GPIO.output(pinRlyLft1, 1)
     	    GPIO.output(pinRlyLft2, 1)
-    	pwm.set_servo(pinLft, abs(spd))
+    	pwm.set_servo(pinPropLft, abs(spd))
     if "rgt" in Q:
     	spd = int(Q["rgt"][0])
     	if spd < -1020:
@@ -179,7 +192,7 @@ def app(environ, start_response):
     	else:
     	    GPIO.output(pinRlyRgt1, 1)
     	    GPIO.output(pinRlyRgt2, 1)
-    	pwm.set_servo(pinRgt, abs(spd))
+    	pwm.set_servo(pinPropRgt, abs(spd))
 
 
 WSGIServer(app).run()
