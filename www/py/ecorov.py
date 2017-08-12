@@ -160,6 +160,26 @@ def app(environ, start_response):
             pwm.set_servo(26, 20000)
         else:
             pwm.set_servo(26, 0)
+    if "stp" in Q:
+        stepMotor(int(Q["stp"][0]))
+    if "lft" in Q:
+    	spd = int(Q["lft"][0])
+    	if spd < -1020:
+    	    GPIO.output(pinRlyLft1, 0)
+    	    GPIO.output(pinRlyLft2, 0)
+    	else:
+    	    GPIO.output(pinRlyLft1, 1)
+    	    GPIO.output(pinRlyLft2, 1)
+    	pwm.set_servo(pinLft, abs(spd))
+    if "rgt" in Q:
+    	spd = int(Q["rgt"][0])
+    	if spd < -1020:
+    	    GPIO.output(pinRlyRgt1, 0)
+    	    GPIO.output(pinRlyRgt2, 0)
+    	else:
+    	    GPIO.output(pinRlyRgt1, 1)
+    	    GPIO.output(pinRlyRgt2, 1)
+    	pwm.set_servo(pinRgt, abs(spd))
 
 
 WSGIServer(app).run()
